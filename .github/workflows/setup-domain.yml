@@ -1,0 +1,23 @@
+name: Setup Custom Domain
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  setup-domain:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Add DNS TXT record for domain verification
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/madhucheran/domain/pages/domains/verify \
+          -d '{"domain":"madhucheran.com","verification_code":"6b93223dadae8264a8691332c54e11"}'
